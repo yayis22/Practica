@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private float verticalForce = 400f;
+    [SerializeField] private float restart = 1f;
+    [SerializeField] private ParticleSystem playerParticles;
     Rigidbody2D  playerRB;
     SpriteRenderer playerSR;
     [SerializeField] private Color yellowColor;
@@ -41,8 +44,15 @@ public class Player : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag(currentColor))
         {
-            Debug.Log("game over");
+            gameObject.SetActive(false);
+            Instantiate(playerParticles, transform.position, Quaternion.identity);
+            Invoke("restartScene", restart);
         }
+    }
+
+    void restartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     void ChangeColor()
